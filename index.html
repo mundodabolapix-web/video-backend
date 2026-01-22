@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Baixar Vídeo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .box {
+      width: 100%;
+      max-width: 400px;
+      background: #1e1e1e;
+      padding: 20px;
+      border-radius: 8px;
+    }
+    input, button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border-radius: 5px;
+      border: none;
+    }
+    button {
+      background: #00c853;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div class="box">
+  <h2>Baixar vídeo</h2>
+  <input id="url" placeholder="Cole o link do vídeo" />
+  <button onclick="baixar()">Baixar</button>
+</div>
+
+<script>
+function baixar() {
+  const url = document.getElementById("url").value;
+
+  fetch("https://video-backend-pb7s.onrender.com/download", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ url })
+  })
+  .then(r => r.json())
+  .then(d => {
+    if (d.download) {
+      window.location.href = d.download;
+    } else {
+      alert("Erro ao baixar");
+    }
+  })
+  .catch(() => alert("Falha na conexão"));
+}
+</script>
+
+</body>
+</html>

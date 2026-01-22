@@ -1,9 +1,14 @@
 FROM node:18
 
-RUN apt update && apt install -y yt-dlp ffmpeg
+RUN apt-get update && apt-get install -y ffmpeg yt-dlp
 
 WORKDIR /app
-COPY . .
+
+COPY package*.json ./
 RUN npm install
+
+COPY . .
+
+EXPOSE 3000
 
 CMD ["npm", "start"]

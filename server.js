@@ -8,18 +8,18 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// pasta onde os vídeos ficam
 const DOWNLOADS_DIR = path.join(__dirname, "downloads");
 if (!fs.existsSync(DOWNLOADS_DIR)) {
   fs.mkdirSync(DOWNLOADS_DIR);
 }
 
-// permitir acesso aos arquivos
 app.use("/downloads", express.static(DOWNLOADS_DIR));
 
 app.post("/download", (req, res) => {
   const { url } = req.body;
-  if (!url) return res.status(400).json({ error: "URL obrigatória" });
+  if (!url) {
+    return res.status(400).json({ error: "URL obrigatória" });
+  }
 
   const output = path.join(
     DOWNLOADS_DIR,
@@ -30,6 +30,7 @@ app.post("/download", (req, res) => {
 
   exec(cmd, (error) => {
     if (error) {
+      console.error(error);
       return res.status(500).json({ error: "Erro ao baixar vídeo" });
     }
 
@@ -44,4 +45,6 @@ app.post("/download", (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log("Servidor rodando"));
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
+});
